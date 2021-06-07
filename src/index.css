@@ -1,5 +1,14 @@
 body {
   margin: 0;
+  overflow: hidden;
+  /* Full height */
+  height: 100vh;
+
+  /* Center and scale the image nicely */
+  background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255,255,255,.4)), url("https://images.unsplash.com/photo-1618961734760-466979ce35b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80") no-repeat center fixed;
+  background-size: cover; 
+  /* background-image: url("https://media.xconomy.com/wordpress/wp-content/images/2020/02/27123419/iStock-1131469143.jpg"); */
+  /* background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255,255,255,.5)), url("https://ysm-res.cloudinary.com/image/upload/ar_16:9,c_fill,dpr_3.0,f_auto,g_faces:auto,q_auto:eco,w_400/v1/yale-medicine/live-prod/ym_new/images/d9a2e072-cf8e-4bc6-95c1-6aef77f379bb_tcm990-407465.jpg"); */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
