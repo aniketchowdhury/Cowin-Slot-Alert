@@ -38,7 +38,6 @@ export const getSlots = async(ID,date) => {
     if(results.ok)
     {
         return results.json().then(res=>{
-            console.log(res.centers);
             return res.centers;
         })
     }

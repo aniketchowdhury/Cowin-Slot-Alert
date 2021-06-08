@@ -1,5 +1,5 @@
 import './App.css';
-import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton} from "@material-ui/core";
+import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton, Switch} from "@material-ui/core";
 import { useEffect, useState } from 'react';
 import {getStates, getDistricts, getSlots} from "./fetchAPI";
 import moment from "moment";
@@ -44,9 +44,11 @@ function App() {
   const [slotsList, setSlotsList] = useState([]);
   const [doseChoice, setDoseChoice] = useState("");
   const [open, setOpen] = useState(true);
+  const [toggleAudio, setAudio] = useState(true);
   const vertical='bottom';const horizontal='center';
 
   useEffect(()=>{
+    document.title = "Cowin Slot Alert"
     async function fetchData(){
       const listOfStates = await getStates();
       setStateList(listOfStates);
@@ -71,27 +73,29 @@ function App() {
         if(dose > 0)
           {
             centername = item.name;
-            let obj={openSlots:0,centerName:"",slotDate:"",vaccine:""};
+            let obj={openSlots:0,centerName:"",slotDate:"",vaccine:"",pincode:""};
             obj.openSlots = dose;
             obj.centerName = centername;
             obj.slotDate = val.date;
             obj.vaccine = val.vaccine;
+            obj.pincode = item.pincode;
             freeSlots.push(obj);
           }
       })
     })
     if(!_.isEmpty(freeSlots)){
-      audio.play();
+      toggleAudio && audio.play();
       return(
-        <TableContainer component={Paper} style={{marginTop: "60px",
-          width: "650px",
-          height: "420px",
+        <TableContainer component={Paper} style={{
+          width: "680px",
+          height: "400px",
           opacity: "0.87",
           overflowY: "auto"}}>
         <Table size="medium" stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
             <TableCell>Center Name</TableCell>
+            <TableCell align="left">Pin Code&nbsp;</TableCell>
             <TableCell align="left">Open Slots</TableCell>
             <TableCell align="left">Slot Dates&nbsp;</TableCell>
             <TableCell align="left">Vaccine&nbsp;</TableCell>
@@ -101,6 +105,7 @@ function App() {
         {freeSlots.map((item,index)=>{
           return (<TableRow key={index.toString()}>
             <TableCell>{item.centerName}</TableCell>
+            <TableCell>{item.pincode}</TableCell>
             <TableCell>{item.openSlots}</TableCell>
             <TableCell>{item.slotDate}</TableCell>
             <TableCell>{item.vaccine}</TableCell>
@@ -129,7 +134,7 @@ function App() {
     }
     let date = moment().format('DD-MM-YYYY');
     fetchSlots(districtCode,date);
-    const interval = setInterval(() => fetchSlots(districtCode,date), 60000)
+    const interval = setInterval(() => fetchSlots(districtCode,date), 15000)
         return () => {
           clearInterval(interval);
         }
@@ -156,10 +161,34 @@ function App() {
     setOpen(false);
   }
 
+  const handleToggle = (event) => {
+    setAudio(event.target.checked)
+  }
+
+  const renderSwitch = () => {
+    return (
+      <div style={{marginTop: "55px", display:"flex"}}>
+      <Switch 
+      value="true"
+      color="primary"
+      data-testid="toggleFilmStrip"
+      size="medium"
+      checked={toggleAudio}
+      onClick={handleToggle}
+    />
+    <Typography style={{paddingTop:"7px"}}>
+      {!toggleAudio?"Switch Audio ON":"Switch Audio OFF"}
+    </Typography>
+    </div>
+    )
+  }
+
   return (
     <div className="App">
       <div className={classes.wrapper}>
+        <div>
         <Typography variant="h3">Cowin Slot Finder</Typography>
+        </div>
         <div style={{display:"flex"}}>
         <FormControl variant="outlined" className={classes.root}>
         {stateList && (
@@ -229,12 +258,12 @@ function App() {
         }
         </FormControl>
         </div>
-        {!_.isEmpty(slotsList) && !_.isEmpty(doseChoice) && displaySlots()}
+        {!_.isEmpty(slotsList) && !_.isEmpty(doseChoice) ? <>{renderSwitch()} {displaySlots()}</>:null}
       </div>
       <Snackbar
         open={open}
         anchorOrigin={{vertical, horizontal}}
-        message="Data is refreshed every 1 minute"
+        message="Data is polled every 30 seconds"
         action={
           <IconButton color="inherit" size="small" onClick={handleClose}>
             <CloseIcon fontSize="small"/>
