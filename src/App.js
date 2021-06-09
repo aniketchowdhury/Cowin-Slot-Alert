@@ -1,5 +1,5 @@
 import './App.css';
-import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton, Switch} from "@material-ui/core";
+import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton, Switch, Grid} from "@material-ui/core";
 import { useEffect, useState } from 'react';
 import {getStates, getDistricts, getSlots} from "./fetchAPI";
 import moment from "moment";
@@ -87,10 +87,10 @@ function App() {
       toggleAudio && audio.play();
       return(
         <TableContainer component={Paper} style={{
-          width: "680px",
-          height: "400px",
+          width: "80vw",
+          height: "auto",
           opacity: "0.87",
-          overflowY: "auto"}}>
+          overflow: "auto"}}>
         <Table size="medium" stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
@@ -189,7 +189,10 @@ function App() {
         <div>
         <Typography variant="h3">Cowin Slot Finder</Typography>
         </div>
-        <div style={{display:"flex"}}>
+        <div style={{display:"flex",width: "80vw",
+    height: "auto",
+    justifyContent: "space-around",
+    flexWrap: "wrap"}}>
         <FormControl variant="outlined" className={classes.root}>
         {stateList && (
           <>
@@ -238,7 +241,8 @@ function App() {
         </>
         )
         }
-        </FormControl><FormControl variant="outlined" className={classes.root}>
+        </FormControl>
+        <FormControl variant="outlined" className={classes.root}>
         {stateName && districtList && (
           <>
           <InputLabel style={{top:"-6px"}}>Select your dose</InputLabel>
