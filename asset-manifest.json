@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Cowin-Slot-Alert/static/css/main.c23cf456.chunk.css",
-    "main.js": "/Cowin-Slot-Alert/static/js/main.7c43e070.chunk.js",
-    "main.js.map": "/Cowin-Slot-Alert/static/js/main.7c43e070.chunk.js.map",
+    "main.js": "/Cowin-Slot-Alert/static/js/main.f9c2ec90.chunk.js",
+    "main.js.map": "/Cowin-Slot-Alert/static/js/main.f9c2ec90.chunk.js.map",
     "runtime-main.js": "/Cowin-Slot-Alert/static/js/runtime-main.504676db.js",
     "runtime-main.js.map": "/Cowin-Slot-Alert/static/js/runtime-main.504676db.js.map",
     "static/js/2.2370e4ad.chunk.js": "/Cowin-Slot-Alert/static/js/2.2370e4ad.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.504676db.js",
     "static/js/2.2370e4ad.chunk.js",
     "static/css/main.c23cf456.chunk.css",
-    "static/js/main.7c43e070.chunk.js"
+    "static/js/main.f9c2ec90.chunk.js"
   ]
 }
