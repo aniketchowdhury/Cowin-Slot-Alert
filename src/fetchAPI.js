@@ -8,7 +8,6 @@ export const getStates = async() =>{
     if(res.ok)
     {
         return res.json().then(data=>{
-            console.log(data.states);
             return data.states;
         })
     }
@@ -23,7 +22,6 @@ export const getDistricts = async(stateID)=>{
     if(results.ok)
     {
         return results.json().then(res=>{
-            console.log(res.districts);
             return res.districts;
         })
     }
@@ -41,4 +39,28 @@ export const getSlots = async(ID,date) => {
             return res.centers;
         })
     }
+}
+
+export const getOTP = async(mobile) => {
+    let txnID="";
+    const formData = {
+        "mobile": mobile
+    }
+    const requestOptions={
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    };
+    const URL = "https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP";
+    const res = await fetch(URL,requestOptions);
+    if(res.ok)
+    {
+        return res.json().then(val=>{
+            console.log("OTP FETCH",val);
+            txnID = val.txnId;
+        })
+    }
+    console.log(txnID);
 }

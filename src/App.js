@@ -1,11 +1,12 @@
 import './App.css';
-import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton, Switch, Grid} from "@material-ui/core";
+import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton, Switch, Button} from "@material-ui/core";
 import { useEffect, useState } from 'react';
-import {getStates, getDistricts, getSlots} from "./fetchAPI";
+import {getStates, getDistricts, getSlots, getOTP} from "./fetchAPI";
 import moment from "moment";
 import _ from "underscore";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from '@material-ui/icons/Error';
+import { WhatsappIcon} from "react-share";
 
 const useStyles = makeStyles(theme=>({
   root:{
@@ -45,6 +46,7 @@ function App() {
   const [doseChoice, setDoseChoice] = useState("");
   const [open, setOpen] = useState(true);
   const [toggleAudio, setAudio] = useState(true);
+  const [textMessageWhatsapp, setWhatsapp] = useState(false);
   const vertical='bottom';const horizontal='center';
 
   useEffect(()=>{
@@ -63,6 +65,15 @@ function App() {
     }
     fetchDistricts(stateCode);
   }, [stateCode]);
+
+  const shareMessageWhatsApp =(str)=>{
+    if(_.isEqual(textMessageWhatsapp,true))
+    {
+      //let sms = 
+    window.open("https://api.whatsapp.com/send?text="+str);
+    setWhatsapp(false);
+    }
+  }
 
   const displaySlots = ()=>{
     let centername; let sessions=[]; let freeSlots=[] ;
@@ -85,6 +96,9 @@ function App() {
     })
     if(!_.isEmpty(freeSlots)){
       toggleAudio && audio.play();
+      let str = "";
+      freeSlots.forEach(item=>str=str+JSON.stringify(item)+"\n")
+      textMessageWhatsapp && shareMessageWhatsApp(str);
       return(
         <TableContainer component={Paper} style={{
           width: "80vw",
@@ -165,6 +179,14 @@ function App() {
     setAudio(event.target.checked)
   }
 
+  const downloadCert = () => {
+    getOTP(9674009430);
+  }
+
+  const shareWhatsApp = () => {
+    setWhatsapp(true);
+  }
+
   const renderSwitch = () => {
     return (
       <div style={{marginTop: "55px", display:"flex"}}>
@@ -176,9 +198,15 @@ function App() {
       checked={toggleAudio}
       onClick={handleToggle}
     />
-    <Typography style={{paddingTop:"7px"}}>
+    <Typography variant="subtitle1" style={{paddingTop:"7px"}}>
       {!toggleAudio?"Switch Audio ON":"Switch Audio OFF"}
     </Typography>
+    <IconButton onClick={shareWhatsApp} style={{width: "50px",
+    height: "50px",
+    paddingBottom: "19px"}}>
+      <WhatsappIcon />
+    </IconButton>
+    <Button variant="primary" onClick={downloadCert} style={{display:"none"}}>DownLoad Certificate</Button>
     </div>
     )
   }
@@ -215,8 +243,11 @@ function App() {
         )
         }
         </FormControl>
-        <FormControl variant="outlined" className={classes.root}>
-        {stateName && districtList && (
+        <FormControl 
+          variant="outlined" 
+          className={classes.root}
+          disabled={_.isEmpty(districtList)?true:false}
+        >
           <>
           <InputLabel style={{top:"-6px"}}>Select your district</InputLabel>
           <Select variant="outlined" 
@@ -239,11 +270,12 @@ function App() {
           }
         </Select>
         </>
-        )
-        }
         </FormControl>
-        <FormControl variant="outlined" className={classes.root}>
-        {stateName && districtList && (
+        <FormControl 
+          variant="outlined" 
+          className={classes.root}
+          disabled={_.isEmpty(districtList)?true:false}
+        >
           <>
           <InputLabel style={{top:"-6px"}}>Select your dose</InputLabel>
           <Select variant="outlined" 
@@ -258,8 +290,6 @@ function App() {
           <MenuItem value={'dose2'}>DOSE 2</MenuItem>
         </Select>
         </>
-        )
-        }
         </FormControl>
         </div>
         {!_.isEmpty(slotsList) && !_.isEmpty(doseChoice) ? <>{renderSwitch()} {displaySlots()}</>:null}
