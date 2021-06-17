@@ -1,7 +1,7 @@
 import './App.css';
 import { Select, MenuItem, Typography, FormControl, makeStyles, Paper, TableRow, TableCell, Table, TableHead,TableBody, TableContainer, InputLabel, Snackbar, IconButton, Switch, Button} from "@material-ui/core";
 import { useEffect, useState } from 'react';
-import {getStates, getDistricts, getSlots, getOTP} from "./fetchAPI";
+import {getStates, getDistricts, getSlots} from "./fetchAPI";
 import moment from "moment";
 import _ from "underscore";
 import CloseIcon from "@material-ui/icons/Close";
@@ -69,14 +69,14 @@ function App() {
   const shareMessageWhatsApp =(str)=>{
     if(_.isEqual(textMessageWhatsapp,true))
     {
-      //let sms = 
-    window.open("https://api.whatsapp.com/send?text="+str);
-    setWhatsapp(false);
+      window.open("https://api.whatsapp.com/send?text="+str);
+      setWhatsapp(false);
     }
   }
 
-  const displaySlots = ()=>{
+  const displaySlots = () =>{
     let centername; let sessions=[]; let freeSlots=[] ;
+    let whatsappMessage = "";
     slotsList.forEach(item=>{
       sessions = item.sessions;
       sessions.forEach(val=>{
@@ -90,15 +90,18 @@ function App() {
             obj.slotDate = val.date;
             obj.vaccine = val.vaccine;
             obj.pincode = item.pincode;
+            whatsappMessage += `\nCenter Name:`+centername
+            +`  Slots: `+ dose+ 
+            `  Date: `+val.date+ 
+            `  Vaccine Name: `+val.vaccine+
+            `  Pincode: `+item.pincode+`%0a%0a`;
             freeSlots.push(obj);
           }
       })
     })
     if(!_.isEmpty(freeSlots)){
       toggleAudio && audio.play();
-      let str = "";
-      freeSlots.forEach(item=>str=str+JSON.stringify(item)+"\n")
-      textMessageWhatsapp && shareMessageWhatsApp(str);
+      textMessageWhatsapp && shareMessageWhatsApp(whatsappMessage);
       return(
         <TableContainer component={Paper} style={{
           width: "80vw",
@@ -179,8 +182,8 @@ function App() {
     setAudio(event.target.checked)
   }
 
-  const downloadCert = () => {
-    getOTP(9674009430);
+  const downloadCert = (e) => {
+    //getOTP(); give cell number here
   }
 
   const shareWhatsApp = () => {
